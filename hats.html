@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Hats</title>
+    <style>
+        body {
+            --main-color: #FF8154;
+            --border-color: #FB5012;
+            --secondary-color: white;
+            --link-color: #FF8154;
+            background-color: var(--secondary-color);
+        }
+
+        .hide {
+            display: none;
+        }
+
+        .selected {
+            padding-bottom: 6px!important;
+            transition: 250ms;
+            animation: bounce 250ms;
+            color: var(--border-color)!important;
+            background-color: var(--secondary-color)!important;
+            box-shadow: 5px 5px 0 0 rgba(0,0,0,0.2);
+        }
+
+        @keyframes bounce {
+            from {padding-bottom: 3px;}
+            50% {padding-bottom: 10px;}
+            to {padding-bottom: 6px;}
+        }
+
+        /*.pop {
+            animation: pop 350ms;
+        }
+
+        */
+
+        .tab {
+            padding: 3px 10px;
+        }
+
+        .tab-front {
+            margin-bottom: -15px;
+            background-color: white;
+            border-radius: 3px;
+            padding: 5px 10px 15px;
+            position: relative;
+            z-index: 11;
+        }
+
+        .pop .question-wrapper {
+            animation: pop-side 350ms;
+            animation-fill-mode: both;
+        }
+
+        .question-wrapper:nth-child(1) {animation-delay: 0ms!important;}
+        .question-wrapper:nth-child(2) {animation-delay: 50ms!important;}
+        .question-wrapper:nth-child(3) {animation-delay: 100ms!important;}
+        .question-wrapper:nth-child(4) {animation-delay: 150ms!important;}
+        .question-wrapper:nth-child(5) {animation-delay: 200ms!important;}
+
+        @keyframes pop {
+            from {margin-top: 40px; opacity: 0;}
+            to {opacity: 1;}
+        }
+
+        @keyframes pop-side {
+            from {margin-left: 70px; opacity: 0;}
+            to {padding-top: 0; opacity: 1;}
+        }
+
+        body {
+            margin: 0;
+            font-family: sans-serif;
+        }
+
+        header {
+            margin: 0;
+            background-color: var(--main-color);
+            padding: 15px 20px 40px;
+            border: 2px solid var(--border-color);
+            border-width: 0 0 0px;
+        }
+
+        h1, h2, h3, h4, p {
+            margin: 0;
+        }
+
+        #wrapper {
+            background-color: var(--secondary-color);
+            position: relative;
+            z-index: 10;
+            min-height: 30px;
+            padding: 20px;
+            border-top: 2px solid var(--border-color);
+        }
+
+        #input .button {
+            border: 2px solid var(--border-color);
+            border-width: 2px 2px 0;
+            background-color: var(--border-color);
+            margin: -1px 0 0 10px;
+            /*padding: 5px 10px;*/
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+            font-weight: bold;
+            color: var(--link-color);
+        }
+
+        #add-hat .button:hover, #remove-hat .button:hover {
+            border-color: orange!important;
+        }
+
+        .button {
+            cursor: pointer;
+        }
+
+        #input {
+            display: flex;
+            flex-direction: row;
+            align-items: flex-end;
+            height: 40px;
+            margin-top: -40px;
+            margin-left: 10px;
+        }
+
+        .question-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            margin: 20px 10px;
+        }
+
+        input[type=text] {
+            border: none;
+            font-size: 1.2em;
+            background-color: #eeeeee;
+            border-radius: 100px;
+            padding: 10px 15px;
+            margin: 10px 0;
+        }
+
+        input[type=checkbox] {
+            -webkit-appearance: none;
+            background-color: #eeeeee;
+            border: 1px solid var(--main-color);
+            padding: 9px;
+            border-radius: 50%;
+            display: inline-block;
+            position: relative;
+        }
+
+        input[type=checkbox]:checked {
+            background-color: var(--main-color);
+        }
+
+        .select-wrapper {
+            position: relative;
+        }
+
+        .select-wrapper select {
+            border: none;
+            border-radius: 100px;
+            font-size: 1em;
+            background-color: var(--main-color);
+            -webkit-appearance: none;
+            padding: 10px 15px;
+            width: 262px;
+        }
+
+        #add-hat .button, #remove-hat .button {
+            background-color: var(--link-color);
+            border: 2px solid var(--border-color);
+            text-align: center;
+            padding: 10px 15px;
+            border-radius: 100px;
+        }
+
+        .pop-up-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 20;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .pop-up-foreground {
+            background-color: white;
+            z-index: 21;
+            border-radius: 10px;
+            box-shadow: 0 0 15px 0 rgba(0,0,0,0.3);
+        }
+
+        .pop-up-background-show {
+            -webkit-backdrop-filter: blur(20px);
+            background-color: rgba(0,0,0,0.5);
+            transition: 150ms;
+        }
+
+        .pop-up-foreground-show {
+            animation: pop-up 700ms;
+            animation-delay: 200ms;
+            animation-fill-mode: both;
+        }
+
+        .hide-pop-up-background {
+            visibility: hidden;
+        }
+
+        .hide-pop-up-foreground {
+            visibility: hidden;
+        }
+
+        @keyframes pop-up {
+            from { opacity: 0; transform: translate(0, 50px)}
+            to { }
+        }
+
+        #pop-up-foreground {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 30px;
+        }
+
+        .pop-up-buttons-wrapper {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-around;
+            width: 100%;
+        }
+
+        .pop-up-text {
+            padding: 10px 0;
+        }
+
+        .pop-up-yes, .pop-up-no {
+            width: 100px;
+            text-align: center;
+            padding: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .pop-up-yes {
+            background-color: red;
+        }
+
+        .pop-up-no {
+            background-color: grey;
+        }
+
+    </style>
+    <script>
+        var hatsList = [];
+        var hatId = 0;
+        function getHatsListLength(hatsList) {
+            if (hatsList) {
+                return hatsList.length;
+            } else {
+                return 0;
+            }
+        }
+
+        function removeHatsList() {
+            var removeHatsList = "";
+            removeHatsList += "<div class='select-wrapper'><select id='hat-select'>";
+            removeHatsList += "<option disabled selected value>Choose a friend</option>";
+            var hatsListLength = getHatsListLength(hatsList);
+            console.log("list length: " + hatsListLength);
+            for (var i = 0; i < hatsListLength; i++) {
+                if (hatsList[i]) {
+                    removeHatsList += "<option value='" + i + "'>" + hatsList[i].name + "</option>";
+                }
+            }
+            removeHatsList += "</select></div>";
+            document.getElementById("remove-hat-list").innerHTML = removeHatsList;
+        }
+
+        function displayHats() {
+            var hatsListLength = getHatsListLength(hatsList);
+            var displayHats = "";
+            for (var i = 0; i < hatsListLength; i++) {
+                if(hatsList[i]) {
+                    displayHats += "<h4>"+hatsList[i].name+"</h4><p>Hat: "+hatsList[i].isHat+"</p><p>Color: "+hatsList[i].hatColor+"</p><p>Height: "+hatsList[i].height+"</p>";
+                }
+            }
+            document.getElementById("hats-list").innerHTML = displayHats;
+        }
+
+        function createNewHat(hatsList, name, isHat, hatColor, height) {
+            hatId = getHatsListLength(hatsList);
+            hatsList[hatId] = new Object;
+            hatsList[hatId].name = name;
+            hatsList[hatId].isHat = isHat;
+            hatsList[hatId].hatColor = hatColor;
+            hatsList[hatId].height = height;
+            hatId++;
+            displayHats();
+            document.getElementById("hat-name").value = "";
+            document.getElementById("hat-is-hat").checked = false;
+        }
+
+        function removeHatPopUp(hatSelect) {
+            if (hatSelect) {
+                var popUpText = "";
+                popUpText += "<p class='pop-up-text'>Are you sure you want to delete "+hatsList[hatSelect].name+"?</p>";
+                popUpText += "<div class='pop-up-buttons-wrapper'><div class='pop-up-no' onClick='hidePopUp()'>No</div><div class='pop-up-yes' onClick='removeHat("+hatSelect+"); hidePopUp()'>Yes</div></div>";
+                document.getElementById("pop-up-background").className = "pop-up-background pop-up-background-show";
+                document.getElementById("pop-up-foreground").className = "pop-up-foreground pop-up-foreground-show";
+                document.getElementById("pop-up-foreground").innerHTML = popUpText;
+            }
+        }
+
+        function removeHat(hatSelect) {
+            hatsList[hatSelect] = null;
+            removeHatsList();
+            displayHats();
+        }
+
+        function getInput(type) {
+            if (type == "add") {
+                var name = document.getElementById("hat-name").value;
+                var isHat = document.getElementById("hat-is-hat").checked;
+                var hatColor = document.getElementById("hat-color").value;
+                var height = document.getElementById("hat-height").value;
+                createNewHat(hatsList, name, isHat, hatColor, height);
+            } else if (type == "remove") {
+                var hatSelect = document.getElementById("hat-select").options[document.getElementById("hat-select").selectedIndex].value;
+                removeHatPopUp(hatSelect);
+            }
+        }
+
+        function showAddFriend() {
+            document.getElementById("add-hat").className = "pop";
+            document.getElementById("remove-hat").className = "hide";
+            document.getElementById("add-hat-button").className = "button selected";
+            document.getElementById("add-hat-button").childNodes[0].className = "tab tab-front";
+            document.getElementById("remove-hat-button").className = "button";
+            document.getElementById("remove-hat-button").childNodes[0].className = "tab";
+        }
+
+        function showRemoveFriend() {
+            document.getElementById("add-hat").className = "hide";
+            document.getElementById("remove-hat").className = "pop";
+            document.getElementById("add-hat-button").className = "button";
+            document.getElementById("add-hat-button").childNodes[0].className = "tab";
+            document.getElementById("remove-hat-button").className = "button selected";
+            document.getElementById("remove-hat-button").childNodes[0].className = "tab tab-front";
+            removeHatsList();
+        }
+
+        function hidePopUp() {
+            document.getElementById("pop-up-background").className = "pop-up-background hide-pop-up-background";
+            document.getElementById("pop-up-foreground").className = "pop-up-background hide-pop-up-foreground";
+        }
+    </script>
+</head>
+
+<body onLoad="displayHats();">
+
+<header>
+    <h1>Friend Creator</h1>
+    <h2>To keep you company when nobody else will</h2>
+</header>
+
+<div id="input">
+    <div class="button" id="add-hat-button" onClick="showAddFriend()"><div class="tab">Add Friend</div></div>
+    <div class="button" id="remove-hat-button" onClick="showRemoveFriend()"><div class="tab">Remove Friend</div></div>
+</div>
+
+<div id="wrapper">
+    <div id="add-hat" class="hide">
+        <div class="question-wrapper">
+            <h4>Name</h4>
+            <p>Choose a nice name for your new friend!</p>
+            <input type="text" id="hat-name" title="name">
+        </div>
+        <div class="question-wrapper">
+            <h4>Hat</h4>
+            <p>Does your friend like to wear a hat?</p>
+            <input type="checkbox" id="hat-is-hat" title="is-hat">
+        </div>
+        <div class="question-wrapper">
+            <h4>Favorite Color</h4>
+            <p>Choose your new friend's favorite color</p>
+            <input type="text" id="hat-color" title="color">
+        </div>
+        <div class="question-wrapper">
+            <h4>Height</h4>
+            <p>How tall is your friend?</p>
+            <input type="text" id="hat-height" title="height">
+        </div>
+        <div class="question-wrapper">
+            <div class="button" type="submit" onClick="getInput('add')">Add Friend</div>
+        </div>
+    </div>
+
+    <div id="remove-hat" class="hide">
+        <div class="question-wrapper">
+            <h4>Which Friend?</h4>
+            <div id="remove-hat-list"></div>
+        </div>
+        <div class="question-wrapper">
+            <div class="button" type="submit" onClick="getInput('remove')">Remove Friend</div>
+        </div>
+    </div>
+
+<div id="hats-list">
+</div>
+
+</div>
+
+<div id="pop-up-background" class="pop-up-background hide-pop-up-background">
+    <div id="pop-up-foreground" class="pop-up-foreground hide-pop-up-foreground">
+
+    </div>
+</div>
+
+</body>
+
+</html>
